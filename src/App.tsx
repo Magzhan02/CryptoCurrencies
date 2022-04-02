@@ -1,10 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 import { TableCell, ConverterBlock } from './components';
-import { typeCoin } from './types';
 
 function App() {
 
