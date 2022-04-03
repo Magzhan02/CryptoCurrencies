@@ -1,4 +1,6 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,29 +11,35 @@ import TableRow from '@mui/material/TableRow';
 
 import ConverterStore from '../../store/ConverterStore/ConverterStore';
 import CurrenciesStore from '../../store/CurrenciesStore/CurrenciesStore';
-import { observer, inject } from 'mobx-react';
 
 import { typeCoin } from '../../types';
 
-type Index = {
+type ICryptoTable = {
   currenciesStore?: CurrenciesStore;
   converterStore?: ConverterStore;
 };
 
-const Index = inject(
+const CryptoTable = inject(
   'currenciesStore',
   'converterStore',
 )(
-  observer(({ currenciesStore }: Index) => {
-    const data: typeCoin[] = currenciesStore!.getData;
+  observer(({ currenciesStore, converterStore }: ICryptoTable) => {
+    const data: typeCoin[] = currenciesStore!.getItems;
+
     React.useEffect(() => {
       if (currenciesStore) {
-        currenciesStore.fetchData();
+        currenciesStore.fetchCoins();
         setInterval(() => {
-          currenciesStore.fetchData();
+          currenciesStore.fetchCoins();
         }, 30 * 1000);
       }
-    },[])
+    }, []);
+
+    const onClickRow = (coin: typeCoin) => {
+      if (converterStore) {
+        converterStore.setSelectedCoin(coin);
+      }
+    };
 
     return (
       <TableContainer component={Paper}>
@@ -49,7 +57,9 @@ const Index = inject(
             {!data.length
               ? 'Loading...'
               : data.map((coin: typeCoin) => (
-                  <TableRow key={coin.name}>
+                  <TableRow 
+                  key={coin.name}
+                  onClick={() => onClickRow(coin)}>
                     <TableCell sx={{ paddingTop: 3 }}>
                       <img width={35} src={coin.imageUrl} alt="Coin-icon" />
                     </TableCell>
@@ -66,4 +76,4 @@ const Index = inject(
   }),
 );
 
-export default Index;
+export default CryptoTable
