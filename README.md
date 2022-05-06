@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Api
 
-[CyptoCompare](https://min-api.cryptocompare.com)
+[CryptoCompare](https://min-api.cryptocompare.com)
 
 ## Stack
 
